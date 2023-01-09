@@ -13,12 +13,22 @@ import java.util.concurrent.TimeUnit;
 public class NG2 {
     WebDriver driver, driver2;
 
+    @BeforeClass
+    public void SetupChrome(){
+        driver = BrowserFactory.getDriver("chrome");
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    @BeforeClass
+    public void SetupEdge(){
+        driver2 = BrowserFactory.getDriver("edge");
+        driver2.manage().window().maximize();
+        driver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
 
     @Test
     public void chromeTest() {
-        WebDriver driver = BrowserFactory.getDriver("chrome");
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         driver.get("https://google.com");
         String googleTitle = driver.getTitle();
@@ -31,16 +41,12 @@ public class NG2 {
 
         Assert.assertEquals(googleTitle, googleTitle2);
         Assert.assertEquals(etsyTitle, etsyTitle2);
-        driver.close();
+
     }
 
 
     @Test
     public void edgeTest() {
-
-        WebDriver driver2 = BrowserFactory.getDriver("edge");
-        driver2.manage().window().maximize();
-        driver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         driver2.get("https://google.com");
         String googleTitleA = driver2.getTitle();
@@ -55,11 +61,15 @@ public class NG2 {
 
         Assert.assertEquals(googleTitleA, googleTitleB);
         Assert.assertEquals(etsyTitleA, etsyTitleB);
-        driver2.close();
+
 
     }
 
-
+@AfterClass
+    public void tearDownClass(){
+        driver.close();
+        driver2.close();
+}
 
 
 }
